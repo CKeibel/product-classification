@@ -8,3 +8,26 @@ services:
     volumes:
       - ./qdrant_storage:/qdrant/storage
     restart: unless-stopped
+
+  backend:
+    build: ./backend
+    container_name: product-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - qdrant_url=http://qdrant:6333
+      - model_id=jinaai/jina-embeddings-v5-omni-nano
+      - collection_name=products
+      - HF_HOME=/app/hf_cache
+    volumes:
+      - ./huggingface_cache:/app/hf_cache
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

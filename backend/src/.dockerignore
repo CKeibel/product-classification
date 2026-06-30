@@ -1,0 +1,25 @@
+*__pycache__
+*.ipynb_checkpoints
+*.DS_Store
+*.venv
+*.jpg
+*.env.*
+/qdrant_storage
+.vscode
+# Git
+.git
+.gitignore
+
+.venv/
+__pycache__/
+.pytest_cache/
+.vscode/
+
+.env
+
+notebooks/
+data/
+query_images/
+
+*.pyc
+*.pyo

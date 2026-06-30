@@ -6,3 +6,4 @@
 *.jpg
 *.env.*
 /qdrant_storage
+huggingface_cache
