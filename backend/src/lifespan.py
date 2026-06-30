@@ -11,7 +11,7 @@ from transformers import AutoModel, AutoProcessor
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[Any, Any, Any]:
+async def lifespan(app: FastAPI) -> AsyncGenerator[Any, Any]:
 
     try:
         if not torch.cuda.is_available():

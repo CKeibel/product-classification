@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, Request
 from qdrant_client import AsyncQdrantClient
 from src.embedding_service import EmbeddingService
+from src.qdrant_service import QdrantService
 from transformers import PreTrainedModel, ProcessorMixin
 
 
@@ -15,11 +16,17 @@ def get_embedding_model(request: Request) -> PreTrainedModel:
     return model
 
 
+EmbeddingModelDep = Annotated[PreTrainedModel, Depends(get_embedding_model)]
+
+
 def get_processor(request: Request) -> ProcessorMixin:
     processor = getattr(request.app.state, "processor", None)
     if not processor:
         raise HTTPException(status_code=500, detail="Processor dependency not found!")
     return processor
+
+
+ProcessorDep = Annotated[ProcessorMixin, Depends(get_processor)]
 
 
 def get_qdrant_client(request: Request) -> AsyncQdrantClient:
@@ -31,8 +38,6 @@ def get_qdrant_client(request: Request) -> AsyncQdrantClient:
     return client
 
 
-EmbeddingModelDep = Annotated[PreTrainedModel, Depends(get_embedding_model)]
-ProcessorDep = Annotated[ProcessorMixin, Depends(get_processor)]
 QdrantDep = Annotated[AsyncQdrantClient, Depends(get_qdrant_client)]
 
 
@@ -43,3 +48,10 @@ def get_embedding_service(
 
 
 EmbeddingServiceDep = Annotated[EmbeddingService, Depends(get_embedding_service)]
+
+
+def get_qdrant_service(client: QdrantDep) -> QdrantService:
+    return QdrantService(client)
+
+
+QdrantServiceDep = Annotated[QdrantService, Depends(get_qdrant_service)]
