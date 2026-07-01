@@ -31,3 +31,17 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+
+  frontend:
+    build: ./frontend
+    container_name: product-frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - BACKEND_URL=http://backend:8000
+      - IMAGE_DIR=/app/images
+    volumes:
+      - ./backend/notebooks/data:/app/images:ro
+    depends_on:
+      - backend
+    restart: unless-stopped

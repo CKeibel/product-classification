@@ -4,6 +4,7 @@
 *.DS_Store
 *.venv
 *.jpg
+*.jpeg
 *.env.*
 /qdrant_storage
 huggingface_cache
